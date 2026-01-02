@@ -1,18 +1,39 @@
-import { Component, OnInit, OnDestroy, HostListener, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  AfterViewInit,
+  Inject,
+  PLATFORM_ID,
+} from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { LucideAngularModule, Layout, ShieldCheck, PenTool, MessageSquare, Users, Lock, Smartphone, Server, Monitor } from 'lucide-angular';
+import { Router } from '@angular/router';
+import {
+  LucideAngularModule,
+  Layout,
+  ShieldCheck,
+  PenTool,
+  MessageSquare,
+  Users,
+  Lock,
+  Smartphone,
+  Server,
+  Monitor,
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,
   imports: [CommonModule, LucideAngularModule],
   templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.scss']
+  styleUrls: ['./landing-page.component.scss'],
 })
 export class LandingPageComponent implements OnInit, OnDestroy, AfterViewInit {
   scrollY = 0;
   isDark = true;
   currentWordIndex = 0;
+  animatingOut = false;
   words = ['writers', 'thinkers', 'creators', 'students', 'learners'];
 
   readonly icons = {
@@ -24,20 +45,32 @@ export class LandingPageComponent implements OnInit, OnDestroy, AfterViewInit {
     Lock,
     Smartphone,
     Server,
-    Monitor
+    Monitor,
   };
 
   private wordInterval: any;
+  private wordSwapTimeout: any;
   private observer: IntersectionObserver | null = null;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {}
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.wordInterval = setInterval(() => {
-        this.currentWordIndex = (this.currentWordIndex + 1) % this.words.length;
-      }, 2500);
+      this.wordInterval = setInterval(() => this.rotateWord(), 2500);
     }
+  }
+
+  onSignUp() {
+    this.router.navigate(['/signup']);
+  }
+
+  private rotateWord() {
+    // Fade out, swap, then fade in to avoid abrupt layout shifts
+    this.animatingOut = true;
+    this.wordSwapTimeout = setTimeout(() => {
+      this.currentWordIndex = (this.currentWordIndex + 1) % this.words.length;
+      this.animatingOut = false;
+    }, 420);
   }
 
   ngAfterViewInit() {
@@ -49,6 +82,9 @@ export class LandingPageComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     if (this.wordInterval) {
       clearInterval(this.wordInterval);
+    }
+    if (this.wordSwapTimeout) {
+      clearTimeout(this.wordSwapTimeout);
     }
     if (this.observer) {
       this.observer.disconnect();
@@ -67,7 +103,8 @@ export class LandingPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onContinue() {
-    console.log('Navigate to Login/App...');
+    // console.log('Navigate to Login/App...');
+    this.router.navigate(['/login']);
     // Add your navigation logic here
     // Example: this.router.navigate(['/login']);
   }

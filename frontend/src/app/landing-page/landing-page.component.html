@@ -95,10 +95,10 @@
         Welcome
       </p>
 
-      <h1 class="fade-in font-serif text-5xl md:text-7xl lg:text-8xl font-light mb-8 leading-tight" style="animation-delay: 0.4s">
+          <h1 class="fade-in font-serif text-5xl md:text-7xl lg:text-8xl font-light mb-8 leading-tight" style="animation-delay: 0.4s">
         A discovery engine for
-        <span class="inline-block min-w-[200px] text-left">
-          <span class="word-transition inline-block">
+        <span class="inline-block min-w-[200px] text-left word-slot">
+          <span class="word-transition inline-block" [class.fade-out]="animatingOut" [class.fade-in]="!animatingOut">
             {{ words[currentWordIndex] }}
           </span>
         </span>
@@ -354,7 +354,7 @@
         <p class="text-lg opacity-70" style="font-family: 'Inter', sans-serif">
           Start your journey
         </p>
-        <button (click)="onContinue()"
+        <button (click)="onSignUp()"
                 class="px-10 py-4 rounded-full text-lg font-medium transition-all"
                 [ngClass]="isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'">
           Sign Up

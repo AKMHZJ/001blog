@@ -1,0 +1,213 @@
+<div
+  class="min-h-screen flex items-center justify-center px-6 transition-colors duration-700"
+  [ngStyle]="{
+    'background-color': isDark ? '#000000' : '#ffffff',
+    'color': isDark ? '#ffffff' : '#000000'
+  }"
+>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
+
+    .font-serif {
+      font-family: 'Crimson Pro', serif;
+    }
+
+    .font-sans {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    input::placeholder {
+      opacity: 0.4;
+    }
+
+    .theme-toggle {
+      cursor: pointer;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      opacity: 1 !important;
+    }
+  </style>
+
+  <!-- Theme Toggle - Top Right -->
+  <button
+    (click)="toggleTheme()"
+    class="theme-toggle fixed top-8 right-8 text-sm z-10 font-sans"
+    [style.opacity]="0.6"
+  >
+    {{ isDark ? 'Light' : 'Dark' }}
+  </button>
+
+  <!-- Signup Container -->
+  <div class="max-w-md w-full fade-in">
+    <!-- Logo -->
+    <div class="flex justify-center mb-12">
+      <a routerLink="/" class="flex items-center gap-2 cursor-pointer transition-opacity hover:opacity-80">
+        <div
+          class="w-10 h-10 rounded-full flex items-center justify-center font-serif font-semibold text-xl"
+          [ngStyle]="{
+            'background-color': isDark ? '#ffffff' : '#000000',
+            'color': isDark ? '#000000' : '#ffffff'
+          }"
+        >
+          B
+        </div>
+        <span class="font-serif text-xl tracking-wide">Blog Network</span>
+      </a>
+    </div>
+
+    <!-- Heading -->
+    <div class="text-center mb-12">
+      <h1 class="font-serif text-5xl md:text-6xl font-light mb-4 tracking-tight">
+        Create account
+      </h1>
+      <p class="font-sans" [style.opacity]="0.6">
+        Already have an account?
+        <a
+          routerLink="/login"
+          class="underline underline-offset-4 transition-opacity hover:opacity-100"
+          [style.opacity]="0.6"
+        >
+          Log in
+        </a>
+      </p>
+    </div>
+
+    <!-- Input Fields -->
+    <div class="space-y-6">
+      <div>
+        <label class="block text-xs uppercase tracking-wider mb-2 font-sans" [style.opacity]="0.5">
+          Email
+        </label>
+        <input
+          [(ngModel)]="email"
+          (keydown)="handleKeyPress($event)"
+          type="email"
+          class="w-full px-0 py-3 bg-transparent text-base outline-none transition-colors font-sans"
+          [ngStyle]="{
+            'border-bottom': isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.2)',
+            'color': isDark ? '#ffffff' : '#000000'
+          }"
+          placeholder="you@example.com"
+          autocomplete="email"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider mb-2 font-sans" [style.opacity]="0.5">
+          Username
+        </label>
+        <input
+          [(ngModel)]="username"
+          (keydown)="handleKeyPress($event)"
+          type="text"
+          class="w-full px-0 py-3 bg-transparent text-base outline-none transition-colors font-sans"
+          [ngStyle]="{
+            'border-bottom': isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.2)',
+            'color': isDark ? '#ffffff' : '#000000'
+          }"
+          placeholder="username"
+          autocomplete="username"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider mb-2 font-sans" [style.opacity]="0.5">
+          Display Name
+        </label>
+        <input
+          [(ngModel)]="displayName"
+          (keydown)="handleKeyPress($event)"
+          type="text"
+          class="w-full px-0 py-3 bg-transparent text-base outline-none transition-colors font-sans"
+          [ngStyle]="{
+            'border-bottom': isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.2)',
+            'color': isDark ? '#ffffff' : '#000000'
+          }"
+          placeholder="Your Name"
+          autocomplete="name"
+        />
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider mb-2 font-sans" [style.opacity]="0.5">
+          Password
+        </label>
+        <input
+          [(ngModel)]="password"
+          (keydown)="handleKeyPress($event)"
+          type="password"
+          class="w-full px-0 py-3 bg-transparent text-base outline-none transition-colors font-sans"
+          [ngStyle]="{
+            'border-bottom': isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.2)',
+            'color': isDark ? '#ffffff' : '#000000'
+          }"
+          placeholder="At least 6 characters"
+          autocomplete="new-password"
+        />
+      </div>
+
+      <p *ngIf="error" class="text-sm font-sans" style="color: #ef4444">
+        {{ error }}
+      </p>
+
+      <button
+        (click)="handleSubmit()"
+        class="w-full py-4 rounded-full text-base font-medium transition-all mt-8"
+        [ngStyle]="{
+          'background-color': isDark ? '#ffffff' : '#000000',
+          'color': isDark ? '#000000' : '#ffffff'
+        }"
+      >
+        Create Account
+      </button>
+    </div>
+
+    <!-- Terms Notice -->
+    <p class="text-center text-xs mt-8 leading-relaxed font-sans" [style.opacity]="0.4">
+      By creating an account, you agree to our
+      <a href="#" class="underline underline-offset-2">Terms of Service</a>
+      and
+      <a href="#" class="underline underline-offset-2">Privacy Policy</a>.
+    </p>
+
+    <!-- Demo Notice -->
+    <div
+      class="mt-8 p-4 rounded-lg text-center"
+      [ngStyle]="{
+        'background-color': isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
+      }"
+    >
+      <p class="text-sm leading-relaxed font-sans" [style.opacity]="0.6">
+        This is a demo application. Your data will only be stored locally in your browser.
+      </p>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="flex justify-center gap-6 mt-12">
+      <a href="#" class="text-xs transition-opacity font-sans" [style.opacity]="0.4">
+        Terms of Service
+      </a>
+      <a href="#" class="text-xs transition-opacity font-sans" [style.opacity]="0.4">
+        Privacy Policy
+      </a>
+    </div>
+  </div>
+</div>

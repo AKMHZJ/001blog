@@ -1,0 +1,165 @@
+<div
+  class="min-h-screen flex items-center justify-center px-6 transition-colors duration-700"
+  [ngStyle]="{
+    'background-color': isDark ? '#000000' : '#ffffff',
+    'color': isDark ? '#ffffff' : '#000000'
+  }"
+>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
+
+    .font-serif {
+      font-family: 'Crimson Pro', serif;
+    }
+
+    .font-sans {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    input::placeholder {
+      opacity: 0.4;
+    }
+
+    .theme-toggle {
+      cursor: pointer;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      opacity: 1 !important;
+    }
+  </style>
+
+  <!-- Theme Toggle - Top Right -->
+  <button
+    (click)="toggleTheme()"
+    class="theme-toggle fixed top-8 right-8 text-sm z-10 font-sans"
+    [style.opacity]="0.6"
+  >
+    {{ isDark ? 'Light' : 'Dark' }}
+  </button>
+
+  <!-- Login Container -->
+  <div class="max-w-md w-full fade-in">
+    <!-- Logo -->
+    <div class="flex justify-center mb-12">
+      <a routerLink="/" class="flex items-center gap-2 cursor-pointer transition-opacity hover:opacity-80">
+        <div
+          class="w-10 h-10 rounded-full flex items-center justify-center font-serif font-semibold text-xl"
+          [ngStyle]="{
+            'background-color': isDark ? '#ffffff' : '#000000',
+            'color': isDark ? '#000000' : '#ffffff'
+          }"
+        >
+          B
+        </div>
+        <span class="font-serif text-xl tracking-wide">Blog Network</span>
+      </a>
+    </div>
+
+    <!-- Heading -->
+    <div class="text-center mb-12">
+      <h1 class="font-serif text-5xl md:text-6xl font-light mb-4 tracking-tight">
+        Log in
+      </h1>
+      <p class="font-sans" [style.opacity]="0.6">
+        or
+        <a
+          routerLink="/signup"
+          class="underline underline-offset-4 transition-opacity hover:opacity-100"
+          [style.opacity]="0.6"
+        >
+          create an account
+        </a>
+      </p>
+    </div>
+
+    <!-- Input Fields -->
+    <div class="space-y-6">
+      <div>
+        <input
+          [(ngModel)]="username"
+          (keydown)="handleKeyPress($event)"
+          class="w-full px-0 py-3 bg-transparent text-base outline-none transition-colors font-sans"
+          [ngStyle]="{
+            'border-bottom': isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.2)',
+            'color': isDark ? '#ffffff' : '#000000'
+          }"
+          placeholder="Email or username"
+          autocomplete="username"
+        />
+      </div>
+
+      <div>
+        <input
+          [(ngModel)]="password"
+          (keydown)="handleKeyPress($event)"
+          type="password"
+          class="w-full px-0 py-3 bg-transparent text-base outline-none transition-colors font-sans"
+          [ngStyle]="{
+            'border-bottom': isDark ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(0,0,0,0.2)',
+            'color': isDark ? '#ffffff' : '#000000'
+          }"
+          placeholder="Password"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <p *ngIf="error" class="text-sm font-sans" style="color: #ef4444">
+        {{ error }}
+      </p>
+
+      <button
+        (click)="handleSubmit()"
+        class="w-full py-4 rounded-full text-base font-medium transition-all mt-8"
+        [ngStyle]="{
+          'background-color': isDark ? '#ffffff' : '#000000',
+          'color': isDark ? '#000000' : '#ffffff'
+        }"
+      >
+        Enter
+      </button>
+
+      <div class="text-center pt-4">
+        <a
+          href="#"
+          class="text-sm underline underline-offset-4 transition-opacity font-sans"
+          [style.opacity]="0.6"
+        >
+          Forgot password?
+        </a>
+      </div>
+    </div>
+
+    <!-- Demo Notice -->
+    <p class="text-center text-sm mt-12 leading-relaxed font-sans" [style.opacity]="0.4">
+      This is a demo — use any username and password to continue.
+    </p>
+
+    <!-- Footer Links -->
+    <div class="flex justify-center gap-6 mt-16">
+      <a href="#" class="text-xs transition-opacity font-sans" [style.opacity]="0.4">
+        Terms of Service
+      </a>
+      <a href="#" class="text-xs transition-opacity font-sans" [style.opacity]="0.4">
+        Privacy Policy
+      </a>
+    </div>
+  </div>
+</div>
