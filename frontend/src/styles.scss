@@ -1,0 +1,15 @@
+/* Tailwind CSS v3 directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
+
+.font-serif { font-family: 'Crimson Pro', serif; }
+.reveal-up { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.reveal-up.visible { opacity: 1; transform: translateY(0); }
+
+.reveal-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

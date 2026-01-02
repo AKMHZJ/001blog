@@ -1,0 +1,389 @@
+<div class="min-h-screen transition-colors duration-700"
+     [ngClass]="isDark ? 'bg-black text-white' : 'bg-white text-black'">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
+
+    .font-serif {
+      font-family: 'Crimson Pro', serif;
+    }
+
+    .fade-in {
+      animation: fadeIn 1.2s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .word-transition {
+      animation: wordChange 2.5s ease-in-out infinite;
+    }
+
+    @keyframes wordChange {
+      0%, 40% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      50%, 90% {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .reveal-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .reveal-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .theme-toggle {
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+    }
+  </style>
+
+  <nav class="fixed top-0 w-full z-50 transition-all duration-300"
+       [ngClass]="{'backdrop-blur-md': scrollY > 50}"
+       [style.background]="scrollY > 50 ? (isDark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)') : 'transparent'"
+       [style.border-bottom]="scrollY > 50 ? (isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)') : 'none'">
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+      <div class="flex items-center justify-between h-20">
+        <div class="flex items-center gap-2 cursor-pointer">
+          <div class="w-8 h-8 rounded-full flex items-center justify-center font-serif font-semibold text-lg"
+               [ngClass]="isDark ? 'bg-white text-black' : 'bg-black text-white'">
+            B
+          </div>
+          <span class="font-serif text-lg tracking-wide">Blog Network</span>
+        </div>
+
+        <div class="flex items-center gap-8">
+          <button (click)="toggleTheme()"
+                  class="theme-toggle text-sm opacity-60 hover:opacity-100 transition-opacity">
+            {{ isDark ? 'Light' : 'Dark' }}
+          </button>
+          <button (click)="onContinue()"
+                  class="px-5 py-2 rounded-full text-sm font-medium transition-all"
+                  [ngClass]="isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'">
+            Log In
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="min-h-screen flex flex-col items-center justify-center px-6 pt-20">
+    <div class="max-w-4xl mx-auto text-center">
+      <p class="fade-in text-sm uppercase tracking-widest mb-8 opacity-60" style="animation-delay: 0.2s">
+        Welcome
+      </p>
+
+      <h1 class="fade-in font-serif text-5xl md:text-7xl lg:text-8xl font-light mb-8 leading-tight" style="animation-delay: 0.4s">
+        A discovery engine for
+        <span class="inline-block min-w-[200px] text-left">
+          <span class="word-transition inline-block">
+            {{ words[currentWordIndex] }}
+          </span>
+        </span>
+      </h1>
+
+      <p class="fade-in text-lg md:text-xl opacity-70 max-w-2xl mx-auto mb-12 leading-relaxed"
+         style="animation-delay: 0.6s; font-family: 'Inter', sans-serif">
+        Discover thoughtful writing from designers, technologists, and creatives.
+        Press continue to sign in and explore posts.
+      </p>
+
+      <div class="fade-in flex flex-col sm:flex-row gap-4 items-center justify-center" style="animation-delay: 0.8s">
+        <button (click)="onContinue()"
+                class="px-8 py-4 rounded-full text-base font-medium transition-all"
+                [ngClass]="isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'">
+          Continue
+        </button>
+      </div>
+
+      <div class="mt-24 fade-in" style="animation-delay: 1s">
+        <p class="text-xs uppercase tracking-widest opacity-40 mb-4">Scroll to explore</p>
+        <div class="w-px h-12 mx-auto opacity-20" [style.background]="isDark ? 'white' : 'black'"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="py-24 px-6" [style.background-color]="isDark ? '#000000' : '#ffffff'">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-16 items-center">
+        <div class="reveal-up space-y-6">
+          <h2 class="font-serif text-4xl md:text-5xl font-light leading-tight">
+            Built for <span style="color: #06b6d4">Growth</span>
+          </h2>
+          <p class="text-lg leading-relaxed" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+            01Blog provides a collaborative space where users can publish posts, interact with content, follow other learners, and engage in meaningful discussions.
+          </p>
+          <p class="text-lg leading-relaxed" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+            It's more than a blogging platform — it's a space for students to document progress, exchange knowledge, and grow together through shared learning experiences.
+          </p>
+        </div>
+
+        <div class="reveal-up rounded-2xl p-8 relative overflow-hidden group"
+             [style.background]="isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'"
+             style="backdrop-filter: blur(16px);"
+             [style.border]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'">
+
+          <div class="space-y-6">
+            <div class="flex items-start gap-4">
+              <div class="p-3 rounded-lg"
+                   [style.background]="isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'"
+                   [style.border]="isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'">
+                <lucide-angular [img]="icons.Layout" class="w-6 h-6" style="color: #06b6d4"></lucide-angular>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Modern Architecture</h3>
+                <p class="text-sm leading-relaxed" style="font-family: 'Inter', sans-serif; opacity: 0.6">
+                  Built as a full-stack web application combining a Java Spring Boot backend with a modern Angular frontend.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="p-3 rounded-lg"
+                   [style.background]="isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'"
+                   [style.border]="isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'">
+                <lucide-angular [img]="icons.ShieldCheck" class="w-6 h-6" style="color: #a855f7"></lucide-angular>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold mb-2">Secure & Scalable</h3>
+                <p class="text-sm leading-relaxed" style="font-family: 'Inter', sans-serif; opacity: 0.6">
+                  Demonstrates real-world concepts such as RESTful APIs, secure user authentication, and robust data persistence.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="py-24 px-6" [style.background-color]="isDark ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.02)'">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal-up">
+        <h2 class="font-serif text-4xl md:text-5xl font-light mb-4">Key Features</h2>
+        <p style="font-family: 'Inter', sans-serif; opacity: 0.6">Everything you need to document your journey.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="reveal-up rounded-xl p-8 hover:-translate-y-2 transition-all duration-300 group"
+             [style.background]="isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'"
+             style="backdrop-filter: blur(16px);"
+             [style.border]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'">
+          <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <lucide-angular [img]="icons.PenTool" class="w-6 h-6" style="color: #06b6d4"></lucide-angular>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Create & Share</h3>
+          <p class="text-sm leading-relaxed" style="font-family: 'Inter', sans-serif; opacity: 0.6">
+            Create, edit, and share rich blog posts about your technical discoveries.
+          </p>
+        </div>
+
+        <div class="reveal-up rounded-xl p-8 hover:-translate-y-2 transition-all duration-300 group"
+             [style.background]="isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'"
+             style="backdrop-filter: blur(16px);"
+             [style.border]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'">
+          <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <lucide-angular [img]="icons.MessageSquare" class="w-6 h-6" style="color: #a855f7"></lucide-angular>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Interactive Discussions</h3>
+          <p class="text-sm leading-relaxed" style="font-family: 'Inter', sans-serif; opacity: 0.6">
+            Comment and interact with other users' content to foster deep learning.
+          </p>
+        </div>
+
+        <div class="reveal-up rounded-xl p-8 hover:-translate-y-2 transition-all duration-300 group"
+             [style.background]="isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'"
+             style="backdrop-filter: blur(16px);"
+             [style.border]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'">
+          <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <lucide-angular [img]="icons.Users" class="w-6 h-6" style="color: #10b981"></lucide-angular>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Build Your Network</h3>
+          <p class="text-sm leading-relaxed" style="font-family: 'Inter', sans-serif; opacity: 0.6">
+            Follow other learners, build connections, and grow your professional circle.
+          </p>
+        </div>
+
+        <div class="reveal-up rounded-xl p-8 hover:-translate-y-2 transition-all duration-300 group"
+             [style.background]="isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'"
+             style="backdrop-filter: blur(16px);"
+             [style.border]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'">
+          <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500/20 to-red-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <lucide-angular [img]="icons.Lock" class="w-6 h-6" style="color: #f97316"></lucide-angular>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Secure Auth</h3>
+          <p class="text-sm leading-relaxed" style="font-family: 'Inter', sans-serif; opacity: 0.6">
+            Secure authentication and user management to keep your data safe.
+          </p>
+        </div>
+
+        <div class="reveal-up rounded-xl p-8 hover:-translate-y-2 transition-all duration-300 group"
+             [style.background]="isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'"
+             style="backdrop-filter: blur(16px);"
+             [style.border]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'">
+          <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500/20 to-indigo-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <lucide-angular [img]="icons.Smartphone" class="w-6 h-6" style="color: #3b82f6"></lucide-angular>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Fully Responsive</h3>
+          <p class="text-sm leading-relaxed" style="font-family: 'Inter', sans-serif; opacity: 0.6">
+            A seamless, user-friendly interface that works perfectly on mobile and desktop.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="tech" class="py-24 px-6 relative overflow-hidden"
+           [style.background-color]="isDark ? '#000000' : '#ffffff'">
+
+    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-cyan-900/10 to-transparent pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto relative">
+      <div class="mb-16 reveal-up text-center">
+        <h2 class="font-serif text-4xl md:text-5xl font-light mb-4">Under the Hood</h2>
+        <p style="font-family: 'Inter', sans-serif; opacity: 0.6">Powered by industry-standard technologies.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="reveal-up rounded-2xl p-8 border-l-4"
+             [style.background]="isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'"
+             style="backdrop-filter: blur(16px); border-left-color: #f97316; border-left-width: 4px;"
+             [style.border-top]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'"
+             [style.border-right]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'"
+             [style.border-bottom]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'">
+
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="font-serif text-2xl font-semibold">Backend</h3>
+            <lucide-angular [img]="icons.Server" style="color: #f97316"></lucide-angular>
+          </div>
+          <ul class="space-y-4">
+            <li class="flex items-center" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+              <span class="w-2 h-2 rounded-full mr-3" style="background-color: #f97316"></span>
+              Java
+            </li>
+            <li class="flex items-center" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+              <span class="w-2 h-2 rounded-full mr-3" style="background-color: #f97316"></span>
+              Spring Boot
+            </li>
+            <li class="flex items-center" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+              <span class="w-2 h-2 rounded-full mr-3" style="background-color: #f97316"></span>
+              REST APIs
+            </li>
+            <li class="flex items-center" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+              <span class="w-2 h-2 rounded-full mr-3" style="background-color: #f97316"></span>
+              MySQL / PostgreSQL
+            </li>
+          </ul>
+        </div>
+
+        <div class="reveal-up rounded-2xl p-8 border-l-4"
+             [style.background]="isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'"
+             style="backdrop-filter: blur(16px); border-left-color: #ef4444; border-left-width: 4px;"
+             [style.border-top]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'"
+             [style.border-right]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'"
+             [style.border-bottom]="isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'">
+
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="font-serif text-2xl font-semibold">Frontend</h3>
+            <lucide-angular [img]="icons.Monitor" style="color: #ef4444"></lucide-angular>
+          </div>
+          <ul class="space-y-4">
+            <li class="flex items-center" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+              <span class="w-2 h-2 rounded-full mr-3" style="background-color: #ef4444"></span>
+              Angular
+            </li>
+            <li class="flex items-center" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+              <span class="w-2 h-2 rounded-full mr-3" style="background-color: #3b82f6"></span>
+              TypeScript
+            </li>
+            <li class="flex items-center" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+              <span class="w-2 h-2 rounded-full mr-3" style="background-color: #eab308"></span>
+              HTML5 / CSS3
+            </li>
+            <li class="flex items-center" style="font-family: 'Inter', sans-serif; opacity: 0.7">
+              <span class="w-2 h-2 rounded-full mr-3" style="background-color: #ec4899"></span>
+              Responsive Design
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="min-h-[60vh] flex items-center justify-center px-6 py-24">
+    <div class="max-w-3xl mx-auto text-center">
+      <div class="reveal-up space-y-8">
+        <h2 class="font-serif text-4xl md:text-6xl font-light leading-tight">
+          Zero noise, notifications, or distractions
+        </h2>
+        <p class="text-xl opacity-70 leading-relaxed" style="font-family: 'Inter', sans-serif">
+          No likes, comments, or ego. Just pure, harmonious expression.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-32 px-6">
+    <div class="max-w-2xl mx-auto text-center">
+      <div class="reveal-up space-y-8">
+        <h2 class="font-serif text-3xl md:text-5xl font-light">
+          We welcome you to join us
+        </h2>
+        <p class="text-lg opacity-70" style="font-family: 'Inter', sans-serif">
+          Start your journey
+        </p>
+        <button (click)="onContinue()"
+                class="px-10 py-4 rounded-full text-lg font-medium transition-all"
+                [ngClass]="isDark ? 'bg-white text-black hover:bg-gray-200' : 'bg-black text-white hover:bg-gray-800'">
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t py-12 px-6" [ngClass]="isDark ? 'border-white/10' : 'border-black/10'">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center font-serif font-semibold text-sm"
+               [ngClass]="isDark ? 'bg-white text-black' : 'bg-black text-white'">
+            B
+          </div>
+          <span class="font-serif tracking-wide">Blog Network</span>
+        </div>
+
+        <div class="flex gap-8">
+          <a href="#" class="text-sm opacity-60 hover:opacity-100 transition-opacity">Manifesto</a>
+          <a href="#" class="text-sm opacity-60 hover:opacity-100 transition-opacity">Privacy Policy</a>
+          <a href="#" class="text-sm opacity-60 hover:opacity-100 transition-opacity">Terms</a>
+        </div>
+
+        <div class="text-sm opacity-40" style="font-family: 'Inter', sans-serif">
+          © 2024 Blog Network
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
