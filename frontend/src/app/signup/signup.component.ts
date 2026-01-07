@@ -2,6 +2,7 @@ import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -20,6 +21,7 @@ export class SignupComponent {
 
   constructor(
     private router: Router,
+    private authService: AuthService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -44,17 +46,30 @@ export class SignupComponent {
     }
 
     const user = {
-      id: Date.now().toString(),
       username: this.username.trim(),
       displayName: this.displayName.trim(),
       email: this.email.trim(),
+      password: this.password.trim(),
       bio: '',
       avatar: ''
     };
 
     // Navigate to login after successful signup
+    // if (isPlatformBrowser(this.platformId)) {
+    //   this.router.navigate(['/login']);
+    // }
     if (isPlatformBrowser(this.platformId)) {
-      this.router.navigate(['/login']);
+      this.authService.signup(user).subscribe({
+        next: (response) => {
+          console.log('Signup Successful:', response);
+          this.router.navigate(['/login']); // Go to login page on success
+        },
+        error: (err) => {
+          console.error('Signup Failed:', err);
+          // Display the error message from Spring Boot (e.g., "Username already taken")
+          this.error = typeof err.error === 'string' ? err.error : 'Signup failed. Please try again.';
+        }
+      });
     }
   }
 
