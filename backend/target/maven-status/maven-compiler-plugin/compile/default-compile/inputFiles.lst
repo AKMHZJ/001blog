@@ -3,4 +3,6 @@
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Controller/AuthController.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Entity/User.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Repository/UserRepository.java
+/home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Security/JwtTokenProvider.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Service/AuthService.java
+/home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/dto/LoginRequest.java

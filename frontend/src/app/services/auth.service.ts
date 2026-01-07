@@ -14,4 +14,14 @@ export class AuthService {
   signup(userData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/signup`, userData);
   }
+
+  login(credentials: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, credentials);
+  }
+
+  // Helper to save data to local storage
+  saveUser(data: any) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('username', data.username);
+  }
 }
