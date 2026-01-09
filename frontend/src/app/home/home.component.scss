@@ -1,0 +1,17 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
+
+/* Define font classes to use in the HTML */
+.font-serif {
+  font-family: 'Crimson Pro', serif;
+}
+
+.font-sans {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Ensure the component takes up full height if needed */
+:host {
+  display: block;
+  min-height: 100vh;
+} 

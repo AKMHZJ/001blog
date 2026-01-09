@@ -9,7 +9,7 @@ import { AuthService } from '../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
   username = '';
@@ -23,60 +23,63 @@ export class LoginComponent {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-handleSubmit() {
-  this.error = '';
+  handleSubmit() {
+    this.error = '';
 
-  if (!this.username.trim()) {
-    this.error = 'Please enter your username';
-    return;
+    if (!this.username.trim()) {
+      this.error = 'Please enter your username';
+      return;
+    }
+
+    if (!this.password.trim()) {
+      this.error = 'Please enter your password';
+      return;
+    }
+
+    // Mock user object for demo
+    // const user = {
+    //   id: '1',
+    //   username: this.username.trim(),
+    //   displayName: this.username.trim(),
+    //   bio: '',
+    //   avatar: ''
+    // };
+    // 2. Prepare the login data (matches your LoginRequest.java)
+    const credentials = {
+      username: this.username.trim(),
+      password: this.password.trim(),
+    };
+
+    console.log('Sending to backend:', credentials);
+
+    // Navigate to home page
+    // 3. Call the Backend
+    if (isPlatformBrowser(this.platformId)) {
+      this.authService.login(credentials).subscribe({
+        next: (response) => {
+          console.log('Login successful!', response);
+
+          // Make sure the response has the expected structure
+          if (response && response.token) {
+            // Save user data - the service should handle the structure
+            this.authService.saveUser(response);
+
+            // Small delay to ensure localStorage is updated
+            setTimeout(() => {
+              this.router.navigate(['/feed']);
+            }, 100);
+          } else {
+            this.error = 'Invalid response from server';
+          }
+        },
+        error: (err) => {
+          console.error('Login error:', err);
+          // Show the 401 error message you got in Postman
+          this.error = err.status === 401 ? 'Invalid username or password' : 'Login failed';
+        },
+      });
+    }
   }
-
-  if (!this.password.trim()) {
-    this.error = 'Please enter your password';
-    return;
-  }
-
-  // Mock user object for demo
-  // const user = {
-  //   id: '1',
-  //   username: this.username.trim(),
-  //   displayName: this.username.trim(),
-  //   bio: '',
-  //   avatar: ''
-  // };
-  // 2. Prepare the login data (matches your LoginRequest.java)
-  const credentials = {
-    username: this.username.trim(),
-    password: this.password.trim()
-  };
-
-  console.log('Sending to backend:', credentials);
-
-  // Navigate to home page
-  // 3. Call the Backend
-  if (isPlatformBrowser(this.platformId)) {
-    this.authService.login(credentials).subscribe({
-      next: (response) => {
-        console.log('Login successful!', response);
-
-        // 1. Save the token/user to LocalStorage so the app remembers the user
-    // localStorage.setItem('token', response.token);
-    // localStorage.setItem('currentUser', JSON.stringify(response));
-
-        // Save user data/token if your backend returns it
-        this.authService.saveUser(response);
-
-        // Navigate only if login is successful
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.error('Login error:', err);
-        // Show the 401 error message you got in Postman
-        this.error = 'Invalid username or password';
-      }
-    });
-  }
-}
 
   handleKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
