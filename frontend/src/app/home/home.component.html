@@ -11,7 +11,7 @@
     Log Out
   </button>
 
-  <main *ngIf="subscribedCount === 0" class="max-w-4xl mx-auto px-6 py-16 text-center">
+  <main *ngIf="feedPosts.length === 0" class="max-w-4xl mx-auto px-6 py-16 text-center">
 
     <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
          [ngStyle]="{'background-color': isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}">
@@ -41,17 +41,29 @@
     </button>
   </main>
 
-  <main *ngIf="subscribedCount > 0" class="max-w-7xl mx-auto px-6 py-16">
-    <div class="mb-12">
-      <h1 class="text-5xl font-light mb-3 font-serif">Your Feed</h1>
-      <p class="opacity-70 text-lg font-sans">
-        Latest posts from {{ subscribedCount }} users you follow
-      </p>
+  <main *ngIf="feedPosts.length > 0" class="max-w-7xl mx-auto px-6 py-16">
+    <div *ngIf="feedPosts[0] as featuredPost">
+      <app-featured-post
+        [title]="featuredPost.title"
+        [excerpt]="featuredPost.excerpt"
+        [date]="(featuredPost.date | date:'longDate') || ''"
+        [image]="featuredPost.image"
+        [category]="featuredPost.category"
+        (postClick)="onPostClick(featuredPost.id)">
+      </app-featured-post>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-      <div *ngFor="let post of feedPosts">
-         <p>Post: {{ post.title }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-16">
+      <div *ngFor="let post of feedPosts.slice(1)">
+        <app-blog-card
+          [title]="post.title"
+          [date]="(post.date | date:'longDate') || ''"
+          [image]="post.image"
+          [category]="post.category"
+          [likeCount]="post.likes.length"
+          [commentCount]="post.comments.length"
+          (cardClick)="onPostClick(post.id)">
+        </app-blog-card>
       </div>
     </div>
   </main>

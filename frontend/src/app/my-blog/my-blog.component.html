@@ -1,0 +1,56 @@
+<div class="min-h-screen bg-black text-white pt-24">
+  <main class="max-w-7xl mx-auto px-6 py-16">
+    <div *ngIf="user" class="flex items-start gap-8 mb-16 pb-12 border-b border-white/10">
+      <img [src]="user.avatar || 'assets/default-avatar.png'" class="w-32 h-32 rounded-full object-cover bg-gray-800" />
+      <div class="flex-1">
+        <h1 class="text-5xl font-light mb-2 font-serif">{{ user.displayName || user.username }}</h1>
+        <p class="opacity-60 mb-4 text-lg font-sans">@{{ user.username }}</p>
+        <p class="opacity-70 mb-6 font-sans">{{ user.bio || 'No bio yet.' }}</p>
+        <button (click)="openEditor()" class="px-6 py-3 bg-white text-black rounded-full hover:bg-gray-200 transition-colors flex items-center gap-2 font-medium font-sans">
+          + Create New Post
+        </button>
+      </div>
+    </div>
+
+    <div class="mb-8">
+      <h2 class="text-3xl font-light mb-2 font-serif">My Posts ({{ myPosts.length }})</h2>
+      <p class="opacity-70 font-sans">Manage your published content</p>
+    </div>
+
+    <div *ngIf="myPosts.length === 0" class="text-center py-16 border border-white/10 rounded-lg bg-white/5">
+      <p class="opacity-70 mb-4 font-sans">You haven't published any posts yet.</p>
+      <button (click)="openEditor()" class="px-6 py-3 bg-white text-black rounded-full hover:bg-gray-200 transition-colors inline-flex items-center gap-2 font-medium font-sans">
+        Create Your First Post
+      </button>
+    </div>
+
+    <div *ngIf="myPosts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+      <div *ngFor="let post of myPosts" class="relative group">
+        <app-blog-card
+          [title]="post.title"
+          [date]="post.date"
+          [image]="post.image"
+          [category]="post.category"
+          [likeCount]="post.likes.length || 0"
+          [commentCount]="post.comments.length || 0">
+        </app-blog-card>
+
+        <div class="flex gap-2 mt-4">
+          <button (click)="handleEdit(post, $event)" class="flex-1 px-4 py-2 border border-white/20 rounded-lg hover:bg-white/5 transition-colors font-sans text-sm">
+            Edit
+          </button>
+          <button (click)="handleDelete(post.id, $event)" class="flex-1 px-4 py-2 border border-red-500/50 text-red-400 rounded-lg hover:bg-red-500/10 transition-colors font-sans text-sm">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <app-post-editor
+    *ngIf="showPostEditor"
+    [post]="editingPost"
+    (save)="handleSave($event)"
+    (cancel)="handleCancel()">
+  </app-post-editor>
+</div>

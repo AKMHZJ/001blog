@@ -1,0 +1,19 @@
+<article (click)="postClick.emit()" class="group cursor-pointer mb-20">
+  <div class="relative overflow-hidden aspect-[21/9] mb-8 rounded-lg">
+    <img [src]="image" [alt]="title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+  </div>
+  <div class="max-w-3xl">
+    <div class="flex items-center gap-3 mb-4">
+      <span class="px-3 py-1 rounded-full text-white text-sm bg-[#06b6d4] font-sans">
+        {{ category }}
+      </span>
+      <time class="text-white/50 text-sm font-sans">{{ date }}</time>
+    </div>
+    <h2 class="text-4xl font-light mb-4 group-hover:opacity-70 transition-colors leading-tight font-serif text-white">
+      {{ title }}
+    </h2>
+    <p class="opacity-70 leading-relaxed text-lg font-sans text-white/80" style="line-height: 1.8">
+      {{ excerpt }}
+    </p>
+  </div>
+</article>

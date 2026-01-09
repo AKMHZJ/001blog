@@ -1,0 +1,68 @@
+<div class="bg-black text-white min-h-screen font-sans" *ngIf="post">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <button (click)="goBack()" class="flex items-center gap-2 opacity-70 hover:opacity-100 mb-8">
+      &larr; Back to Feed
+    </button>
+
+    <article>
+      <header class="mb-8">
+        <div class="flex items-center gap-4 mb-4">
+          <img [src]="post.author?.avatar || 'https://via.placeholder.com/40'" alt="Author" class="w-10 h-10 rounded-full">
+          <div>
+            <p class="font-medium">{{ post.author?.name }}</p>
+            <p class="text-white/50 text-sm">{{ post.date | date:'longDate' }}</p>
+          </div>
+        </div>
+        <h1 class="text-4xl lg:text-5xl font-serif font-light leading-tight mb-4">{{ post.title }}</h1>
+        <p class="text-lg text-white/70">{{ post.excerpt }}</p>
+      </header>
+
+      <div class="aspect-[16/9] rounded-lg overflow-hidden mb-8">
+        <img [src]="post.image" [alt]="post.title" class="w-full h-full object-cover">
+      </div>
+
+      <div class="prose prose-invert prose-lg max-w-none text-white/90 leading-relaxed">
+        <p *ngFor="let paragraph of post.content">{{ paragraph }}</p>
+      </div>
+
+      <hr class="border-white/20 my-8">
+
+      <div class="flex items-center gap-6">
+        <button (click)="handleLike()" class="flex items-center gap-2">
+          <svg [class.text-red-500]="isLiked" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.636l1.318-1.318a4.5 4.5 0 016.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z"></path></svg>
+          <span>{{ post.likes.length || 0 }}</span>
+        </button>
+      </div>
+    </article>
+
+    <hr class="border-white/20 my-8">
+
+    <section class="mt-12">
+      <h2 class="text-2xl font-serif font-light mb-6">Comments ({{ post.comments.length || 0 }})</h2>
+
+      <div class="mb-8" *ngIf="currentUser">
+        <form (ngSubmit)="handleCommentSubmit()">
+          <textarea [(ngModel)]="commentText" name="commentText" rows="3" class="w-full bg-white/10 rounded-lg p-4 outline-none focus:ring-2 focus:ring-cyan-500" placeholder="Write a comment..."></textarea>
+          <div class="text-right mt-2">
+            <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 text-white font-medium py-2 px-6 rounded-full" [disabled]="!commentText.trim()">Post Comment</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="space-y-6">
+        <div *ngFor="let comment of post.comments" class="flex gap-4">
+          <img [src]="comment.author?.avatar || 'https://via.placeholder.com/40'" alt="Author" class="w-10 h-10 rounded-full">
+          <div class="flex-1">
+            <div class="flex justify-between items-baseline">
+              <p class="font-medium">{{ comment.author?.name }}</p>
+              <p class="text-white/50 text-sm">{{ formatTimestamp(comment.timestamp) }}</p>
+            </div>
+            <p class="text-white/80">{{ comment.text }}</p>
+            <button *ngIf="currentUser?.id === comment.author?.id" (click)="handleDeleteComment(comment.id)" class="text-red-500 text-sm mt-1">Delete</button>
+          </div>
+        </div>
+        <p *ngIf="!post.comments.length" class="text-white/50">No comments yet.</p>
+      </div>
+    </section>
+  </div>
+</div>

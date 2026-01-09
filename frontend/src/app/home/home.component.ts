@@ -1,56 +1,51 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { PostService } from '../services/post.service';
+import { Post } from '../models/post';
+import { FeaturedPostComponent } from '../featured-post/featured-post.component';
+import { BlogCardComponent } from '../blog-card/blog-card.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FeaturedPostComponent, BlogCardComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
   isDark = true; // Use your theme logic here
   currentUser: any = null;
-  feedPosts: any[] = [];
+  feedPosts: Post[] = [];
   subscribedCount = 0;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private postService: PostService) {}
+
+  onPostClick(postId: string) {
+    this.router.navigate(['/post', postId]);
+  }
 
   ngOnInit() {
     this.checkLogin();
-  }
-
-  checkLogin() {
-    // 1. Retrieve the saved user
-    const token = localStorage.getItem('token');
-    if (!token) {
-      // If no user, kick them back to login
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    // Get user from AuthService or localStorage
-    const userStr = localStorage.getItem('currentUser');
-    this.currentUser = userStr ? JSON.parse(userStr) : null;
-
-    // 2. Load the Feed Data
     this.loadFeed();
   }
 
+  checkLogin() {
+    // In a real app, you would use AuthService to get user
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+      this.currentUser = JSON.parse(userStr);
+    } else {
+        // For mock purposes, let's create a dummy user
+        this.currentUser = {id: '1', name: 'demo-user'};
+    }
+  }
+
   loadFeed() {
-    const token = localStorage.getItem('token');
-
-    // We must send the Token to the backend to prove who we are
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`, // <--- IMPORTANT
+    this.postService.getPosts().subscribe(posts => {
+      this.feedPosts = posts;
     });
-
-    // Replace with your real backend endpoint later
-    // For now, we simulate empty or dummy data
-    this.feedPosts = [];
-    this.subscribedCount = 0;
+    this.subscribedCount = 0; // Mock data
   }
 
   onDiscoverClick() {
