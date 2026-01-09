@@ -6,7 +6,7 @@
 
   <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-    <a routerLink="/" class="hover:opacity-70 transition-opacity flex items-center gap-2">
+    <a routerLink="/feed" class="hover:opacity-70 transition-opacity flex items-center gap-2">
       <div class="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-lg font-serif"
            [ngStyle]="{'background-color': isDark ? '#ffffff' : '#000000', 'color': isDark ? '#000000' : '#ffffff'}">
         B
@@ -17,10 +17,10 @@
       </h1>
     </a>
 
-    <div *ngIf="currentUser" class="flex items-center gap-8">
+    <div *ngIf="currentUser$ | async as currentUser" class="flex items-center gap-8">
 
       <nav class="hidden md:flex gap-8 font-sans text-sm">
-        <a routerLink="/"
+        <a routerLink="/feed"
            routerLinkActive="opacity-100 font-medium"
            [routerLinkActiveOptions]="{exact: true}"
            class="transition-all opacity-60 hover:opacity-100"
@@ -54,7 +54,7 @@
              alt="User"
              class="w-8 h-8 rounded-full object-cover bg-gray-500">
 
-        <button (click)="initiateLogout()"
+        <button (click)="logout()"
                 class="transition-colors hover:text-red-500"
                 [style.color]="isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)'"
                 title="Logout">
@@ -68,34 +68,3 @@
     </div>
   </div>
 </header>
-
-<div *ngIf="showLogoutModal"
-     class="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300"
-     [ngStyle]="{'background-color': isDark ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.6)'}">
-
-  <div class="rounded-2xl p-8 max-w-sm w-full shadow-2xl"
-       [ngStyle]="{
-         'background-color': isDark ? '#1a1a1a' : '#ffffff',
-         'color': isDark ? '#ffffff' : '#000000',
-         'border': isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)'
-       }">
-
-    <h3 class="font-serif text-2xl mb-2 text-center">Log Out?</h3>
-    <p class="font-sans text-center opacity-70 mb-8 text-sm">
-      Are you sure you want to end your session?
-    </p>
-
-    <div class="flex gap-4">
-      <button (click)="cancelLogout()"
-              class="flex-1 py-3 rounded-full font-sans text-sm font-medium transition-colors"
-              [ngStyle]="{'background-color': isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}">
-        Cancel
-      </button>
-      <button (click)="confirmLogout()"
-              class="flex-1 py-3 rounded-full font-sans text-sm font-medium hover:opacity-90"
-              style="background-color: #ef4444; color: white;">
-        Log Out
-      </button>
-    </div>
-  </div>
-</div>
