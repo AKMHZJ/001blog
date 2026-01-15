@@ -1,8 +1,14 @@
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Application.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Config/SecurityConfig.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Controller/AuthController.java
+/home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Controller/PostController.java
+/home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Entity/Comment.java
+/home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Entity/Post.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Entity/User.java
+/home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Repository/PostRepository.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Repository/UserRepository.java
+/home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Security/JwtAuthenticationFilter.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Security/JwtTokenProvider.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Service/AuthService.java
+/home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/Service/CustomUserDetailsService.java
 /home/mghdaigu/Desktop/001blog/backend/src/main/java/com/_blog/dto/LoginRequest.java
