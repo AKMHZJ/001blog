@@ -32,12 +32,14 @@ export class PostEditorComponent {
   }
 
   handleSubmit() {
-    this.save.emit({
+    const payload = {
       title: this.title,
       excerpt: this.excerpt,
       category: this.category,
       image: this.image || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1080',
       content: this.content.split('\n\n').filter(p => p.trim()),
-    });
+    };
+    console.log('PostEditor payload:', payload);
+    this.save.emit(payload);
   }
 }

@@ -4,10 +4,17 @@
   </div>
   <div class="max-w-3xl">
     <div class="flex items-center gap-3 mb-4">
-      <span class="px-3 py-1 rounded-full text-white text-sm bg-[#06b6d4] font-sans">
-        {{ category }}
-      </span>
-      <time class="text-white/50 text-sm font-sans">{{ date }}</time>
+      <img *ngIf="author?.avatar" [src]="author.avatar" class="w-10 h-10 rounded-full object-cover" />
+      <div *ngIf="author">
+        <div class="text-sm font-sans text-white/90">{{ author.displayName || author.name || author.username }}</div>
+        <div class="text-xs text-white/50">@{{ author.username }}</div>
+      </div>
+      <div class="ml-auto flex items-center gap-3">
+        <span class="px-3 py-1 rounded-full text-white text-sm bg-[#06b6d4] font-sans">
+          {{ category }}
+        </span>
+        <time class="text-white/50 text-sm font-sans">{{ date }}</time>
+      </div>
     </div>
     <h2 class="text-4xl font-light mb-4 group-hover:opacity-70 transition-colors leading-tight font-serif text-white">
       {{ title }}

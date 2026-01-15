@@ -48,15 +48,22 @@ export class PostPageComponent implements OnInit {
 
   handleLike(): void {
     if (!this.currentUser || !this.post) return;
-    this.postService.toggleLike(this.post.id, this.currentUser.id);
-    this.isLiked = !this.isLiked;
+    this.postService.toggleLike(this.post.id, this.currentUser.id).subscribe(post => {
+      this.post = post;
+      this.isLiked = this.post.likes?.includes(this.currentUser.id) || false;
+    });
   }
 
   handleCommentSubmit(): void {
     if (!this.currentUser || !this.commentText.trim() || !this.post) return;
-
-    this.postService.addComment(this.post.id, this.commentText, this.currentUser);
-    this.commentText = '';
+    this.postService.addComment(this.post.id, this.commentText, this.currentUser).subscribe(comment => {
+      // Append to local post comments for immediate UI update
+      if (this.post) {
+        if (!this.post.comments) this.post.comments = [];
+        this.post.comments.push(comment);
+      }
+      this.commentText = '';
+    });
   }
 
   handleDeleteComment(commentId: string): void {

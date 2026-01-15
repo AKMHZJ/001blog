@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Observable } from 'rxjs';
 
@@ -14,9 +15,14 @@ import { Observable } from 'rxjs';
 export class HeaderComponent {
   isDark = true; // You can connect this to a theme service later
   currentUser$: Observable<any>;
-
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private router: Router) {
     this.currentUser$ = this.authService.currentUser$;
+  }
+
+  goToFeed(event: Event) {
+    event.preventDefault();
+    // Navigate with a query param to indicate user-initiated visit to feed
+    this.router.navigate(['/feed'], { queryParams: { showEmpty: '1' } });
   }
 
   logout() {

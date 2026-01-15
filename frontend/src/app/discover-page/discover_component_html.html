@@ -1,0 +1,70 @@
+<div class="min-h-screen bg-black text-white pt-24">
+  <main class="max-w-4xl mx-auto px-6 py-16">
+    <!-- Header -->
+    <div class="mb-12">
+      <h1 class="text-5xl font-light mb-3" style="font-family: 'Crimson Pro', serif">
+        Discover Users
+      </h1>
+      <p class="opacity-70 text-lg" style="font-family: 'Inter', sans-serif">
+        Find interesting people to follow and see their posts in your feed
+      </p>
+    </div>
+
+    <!-- Users List -->
+    <div class="space-y-4">
+      <div *ngFor="let user of users"
+           (click)="onUserClick(user)"
+           class="border border-white/10 rounded-lg p-6 hover:border-white/20 hover:bg-white/5 transition-all cursor-pointer">
+        
+        <div class="flex items-start gap-6">
+          <!-- Avatar -->
+          <img [src]="user.avatar" 
+               [alt]="user.name"
+               class="w-20 h-20 rounded-full object-cover flex-shrink-0">
+          
+          <!-- User Info -->
+          <div class="flex-1 min-w-0">
+            <h3 class="text-2xl font-light mb-1" style="font-family: 'Crimson Pro', serif">
+              {{user.name}}
+            </h3>
+            
+            <p class="opacity-60 mb-3 text-sm" style="font-family: 'Inter', sans-serif">
+              @{{user.username}} · {{getUserPostCount(user.id)}} 
+              {{getUserPostCount(user.id) === 1 ? 'post' : 'posts'}}
+            </p>
+            
+            <p class="opacity-70 mb-4" style="font-family: 'Inter', sans-serif">
+              {{user.bio}}
+            </p>
+            
+            <!-- Subscribe Button -->
+            <button (click)="handleToggleSubscribe(user.id, $event)"
+                    [ngClass]="isSubscribed(user.id) 
+                      ? 'border border-white/20 hover:bg-white/5' 
+                      : 'bg-white text-black hover:bg-gray-200'"
+                    class="px-5 py-2 rounded-full transition-all flex items-center gap-2 text-sm font-medium"
+                    style="font-family: 'Inter', sans-serif">
+              
+              <lucide-icon *ngIf="isSubscribed(user.id)" 
+                          [img]="icons.UserMinus" 
+                          [size]="16"></lucide-icon>
+              <lucide-icon *ngIf="!isSubscribed(user.id)" 
+                          [img]="icons.UserPlus" 
+                          [size]="16"></lucide-icon>
+              
+              {{isSubscribed(user.id) ? 'Subscribed' : 'Subscribe'}}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="users.length === 0" 
+           class="text-center py-16 border border-white/10 rounded-lg bg-white/5">
+        <p class="opacity-70" style="font-family: 'Inter', sans-serif">
+          No users found.
+        </p>
+      </div>
+    </div>
+  </main>
+</div>

@@ -17,9 +17,32 @@
       </div>
 
       <div>
+        <label class="block text-xs uppercase tracking-wider mb-2 opacity-50 font-sans">Excerpt</label>
+        <input [(ngModel)]="excerpt" name="excerpt" class="w-full bg-transparent border-b py-3 outline-none font-sans"
+               [style.border-color]="isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'">
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider mb-2 opacity-50 font-sans">Category</label>
+        <select [(ngModel)]="category" name="category" class="w-full bg-transparent border-b py-3 outline-none font-sans">
+          <option>Technology</option>
+          <option>Lifestyle</option>
+          <option>Tech</option>
+          <option>News</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs uppercase tracking-wider mb-2 opacity-50 font-sans">Image URL</label>
+        <input [(ngModel)]="image" name="image" class="w-full bg-transparent border-b py-3 outline-none font-sans"
+               [style.border-color]="isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'">
+      </div>
+
+      <div>
         <label class="block text-xs uppercase tracking-wider mb-2 opacity-50 font-sans">Content</label>
         <textarea [(ngModel)]="content" name="content" required rows="10" class="w-full bg-transparent border-b py-3 outline-none font-sans resize-none"
                   [style.border-color]="isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'"></textarea>
+        <p class="text-xs opacity-60 mt-2">Separate paragraphs with a blank line; they will be sent as an array.</p>
       </div>
 
       <div class="flex gap-4 pt-4">

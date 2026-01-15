@@ -1,4 +1,11 @@
 <article (click)="cardClick.emit()" class="cursor-pointer group">
+  <div class="flex items-center gap-3 mb-3">
+    <img *ngIf="author?.avatar" [src]="author.avatar" class="w-10 h-10 rounded-full object-cover" />
+    <div *ngIf="author">
+      <div class="text-sm font-sans text-white/90">{{ author.displayName || author.name || author.username }}</div>
+      <div class="text-xs text-white/50">@{{ author.username }}</div>
+    </div>
+  </div>
   <div class="relative overflow-hidden aspect-[4/3] mb-6 rounded-lg">
     <img [src]="image" [alt]="title" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
   </div>

@@ -13,5 +13,6 @@ export class FeaturedPostComponent {
   @Input() date: string = '';
   @Input() image: string = '';
   @Input() category: string = '';
+  @Input() author: any = null;
   @Output() postClick = new EventEmitter<void>();
 }

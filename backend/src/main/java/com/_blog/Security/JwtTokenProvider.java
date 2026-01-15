@@ -5,15 +5,22 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
+import jakarta.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtTokenProvider {
-    // This is a secret key. In production, keep this very safe!
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // Secret key loaded from configuration so it survives restarts
+    @Value("${jwt.secret:change_this_default_to_a_secure_secret_at_deployment}")
+    private String jwtSecret;
+
+    private Key key;
     private final long jwtExpirationInMs = 3600000; // 1 hour
 
     public String generateToken(String username) {
@@ -26,6 +33,12 @@ public class JwtTokenProvider {
                 .setExpiration(expiryDate)
                 .signWith(key)
                 .compact();
+    }
+
+    @PostConstruct
+    public void init() {
+        // Create HMAC key from configured secret
+        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
     public String extractUsername(String token) {

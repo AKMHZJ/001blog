@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+/* Ensure proper font rendering */
+h1, h2, h3 {
+  font-family: 'Crimson Pro', serif;
+  font-weight: 300;
+}
+
+p, button, span {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Smooth transitions */
+button {
+  transition: all 0.3s ease;
+}
+
+/* Focus states */
+button:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+}

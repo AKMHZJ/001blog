@@ -49,14 +49,20 @@ export class MyBlogComponent implements OnInit {
   }
 
   handleSave(post: any) {
+    console.log('Creating/updating post payload:', post);
     if (this.editingPost) {
       // Update existing post
-      this.postService.updatePost({ ...this.editingPost, ...post });
+      this.postService.updatePost({ ...this.editingPost, ...post }).subscribe(() => {
+        this.loadUserPosts(this.user?.id || '1');
+        this.handleCancel();
+      });
     } else {
       // Create new post
-      this.postService.addPost(post);
+      this.postService.addPost(post).subscribe(() => {
+        this.loadUserPosts(this.user?.id || '1');
+        this.handleCancel();
+      });
     }
-    this.handleCancel();
   }
 
 

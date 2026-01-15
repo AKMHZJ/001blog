@@ -12,6 +12,7 @@ export class BlogCardComponent {
   @Input() date: string = '';
   @Input() image: string = '';
   @Input() category: string = '';
+  @Input() author: any = null;
   @Input() likeCount: number = 0;
   @Input() commentCount: number = 0;
   @Output() cardClick = new EventEmitter<void>();

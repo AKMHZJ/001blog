@@ -107,6 +107,7 @@ private JwtTokenProvider tokenProvider; // Inject your new provider
                 response.put("token", token);
                 response.put("username", user.getUsername());
                 response.put("displayName", user.getDisplayName());
+                response.put("id", String.valueOf(user.getId()));
                 // response.put("email", user.getEmail());
                 
                 // For now, return the user info (We will add JWT tokens next)
