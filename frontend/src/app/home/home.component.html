@@ -1,21 +1,41 @@
 <div class="min-h-screen pt-24 transition-colors duration-700"
-     [ngStyle]="{'background-color': isDark ? '#000000' : '#ffffff', 'color': isDark ? '#ffffff' : '#000000'}">
+  [ngStyle]="{'background-color': isDark ? '#000000' : '#ffffff', 'color': isDark ? '#ffffff' : '#000000'}">
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
-    .font-serif { font-family: 'Crimson Pro', serif; }
-    .font-sans { font-family: 'Inter', sans-serif; }
+
+    .font-serif {
+      font-family: 'Crimson Pro', serif;
+    }
+
+    .font-sans {
+      font-family: 'Inter', sans-serif;
+    }
   </style>
 
   <button (click)="logout()" class="fixed top-8 right-8 text-sm font-sans opacity-60 hover:opacity-100">
     Log Out
   </button>
 
+  <!-- LOADING STATE (prevents blank screen) -->
+  <main *ngIf="!feedLoaded" class="max-w-4xl mx-auto px-6 py-24">
+    <p class="opacity-70 font-sans text-lg">Loading your feed...</p>
+
+    <!-- simple skeleton -->
+    <div class="mt-10 space-y-6">
+      <div class="h-40 rounded-2xl opacity-10 bg-white"></div>
+      <div class="h-40 rounded-2xl opacity-10 bg-white"></div>
+      <div class="h-40 rounded-2xl opacity-10 bg-white"></div>
+    </div>
+  </main>
+
+
   <main *ngIf="feedLoaded && feedPosts.length === 0" class="max-w-4xl mx-auto px-6 py-16 text-center">
 
     <div class="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
-         [ngStyle]="{'background-color': isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      [ngStyle]="{'background-color': isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
         <circle cx="9" cy="7" r="4"></circle>
         <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
@@ -31,10 +51,8 @@
       Start following other users to see their posts in your personalized feed.
     </p>
 
-    <a routerLink="/discover"
-       (click)="goToDiscover($event)"
-       class="inline-block px-8 py-4 rounded-full font-medium transition-colors font-sans"
-       [ngStyle]="{
+    <a routerLink="/discover" (click)="goToDiscover($event)"
+      class="inline-block px-8 py-4 rounded-full font-medium transition-colors font-sans" [ngStyle]="{
          'background-color': isDark ? '#ffffff' : '#000000',
          'color': isDark ? '#000000' : '#ffffff'
        }">
@@ -44,28 +62,17 @@
 
   <main *ngIf="feedLoaded && feedPosts.length > 0" class="max-w-7xl mx-auto px-6 py-16">
     <div *ngIf="feedPosts[0] as featuredPost">
-      <app-featured-post
-        [title]="featuredPost.title"
-        [excerpt]="featuredPost.excerpt"
-        [date]="(featuredPost.date | date:'longDate') || ''"
-        [image]="featuredPost.image"
-        [category]="featuredPost.category"
-        [author]="featuredPost.author"
-        (postClick)="onPostClick(featuredPost.id)">
+      <app-featured-post [title]="featuredPost.title" [excerpt]="featuredPost.excerpt"
+        [date]="(featuredPost.date | date:'longDate') || ''" [image]="featuredPost.image"
+        [category]="featuredPost.category" [author]="featuredPost.author" (postClick)="onPostClick(featuredPost.id)">
       </app-featured-post>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-16">
       <div *ngFor="let post of feedPosts.slice(1)">
-        <app-blog-card
-          [title]="post.title"
-          [date]="(post.date | date:'longDate') || ''"
-          [image]="post.image"
-          [category]="post.category"
-          [author]="post.author"
-          [likeCount]="post.likes.length"
-          [commentCount]="post.comments.length"
-          (cardClick)="onPostClick(post.id)">
+        <app-blog-card [title]="post.title" [date]="(post.date | date:'longDate') || ''" [image]="post.image"
+          [category]="post.category" [author]="post.author" [likeCount]="post.likes.length"
+          [commentCount]="post.comments.length" (cardClick)="onPostClick(post.id)">
         </app-blog-card>
       </div>
     </div>

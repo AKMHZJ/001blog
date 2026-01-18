@@ -19,11 +19,11 @@ export class HeaderComponent {
     this.currentUser$ = this.authService.currentUser$;
   }
 
-  goToFeed(event: Event) {
-    event.preventDefault();
-    // Navigate with a query param to indicate user-initiated visit to feed
-    this.router.navigate(['/feed'], { queryParams: { showEmpty: '1' } });
-  }
+  // goToFeed(event: Event) {
+  //   event.preventDefault();
+  //   // Navigate with a query param to indicate user-initiated visit to feed
+  //   this.router.navigate(['/feed'], { queryParams: { showEmpty: '1' } });
+  // }
 
   logout() {
     this.authService.logout();

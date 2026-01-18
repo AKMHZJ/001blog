@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PostService } from '../services/post.service';
 import { Post } from '../models/post';
@@ -26,7 +27,15 @@ export class HomeComponent implements OnInit {
   subscribedCount = 0;
   showEmptyRequested = false;
 
-  constructor(private router: Router, private postService: PostService, private userService: UserService, private authService: AuthService, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private postService: PostService,
+    private userService: UserService,
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: any
+  ) {}
 
   onPostClick(postId: string) {
     this.router.navigate(['/post', postId]);
@@ -43,12 +52,12 @@ export class HomeComponent implements OnInit {
     this.loadFeed();
 
     // Reload feed when navigation returns to /feed
-    this.router.events.subscribe(ev => {
-      if (ev instanceof NavigationEnd && ev.urlAfterRedirects && ev.urlAfterRedirects.indexOf('/feed') !== -1) {
-        console.log('[Home] NavigationEnd ->', ev.urlAfterRedirects);
-        this.loadFeed();
-      }
-    });
+    // this.router.events.subscribe(ev => {
+    //   if (ev instanceof NavigationEnd && ev.urlAfterRedirects && ev.urlAfterRedirects.indexOf('/feed') !== -1) {
+    //     console.log('[Home] NavigationEnd ->', ev.urlAfterRedirects);
+    //     this.loadFeed();
+    //   }
+    // });
 
     // Reload feed when login status changes to true (e.g., right after login)
     try {
@@ -60,38 +69,51 @@ export class HomeComponent implements OnInit {
 
   checkLogin() {
     // In a real app, you would use AuthService to get user
-    const userStr = localStorage.getItem('currentUser');
-    if (userStr) {
-      this.currentUser = JSON.parse(userStr);
-    } else {
+    if (isPlatformBrowser(this.platformId)) {
+      const userStr = localStorage.getItem('currentUser');
+      if (userStr) {
+        this.currentUser = JSON.parse(userStr);
+      } else {
         // For mock purposes, let's create a dummy user
         this.currentUser = {id: '1', name: 'demo-user'};
+      }
+    } else {
+      // On server, avoid using localStorage — set a safe default
+      this.currentUser = {id: '1', name: 'demo-user'};
     }
   }
 
   loadFeed() {
+    this.feedLoaded = false;
     // If user is logged in, try to load subscriptions from server; otherwise fallback to localStorage
     if (this.authService.isLoggedIn()) {
       this.userService.getMyFollowing().subscribe(ids => {
         const subs = ids || [];
         this.loadPostsForSubscriptionsOrGlobal(subs);
-      }, err => {
+        }, err => {
         console.error('[Home] failed to load following list', err);
-        // fallback to localStorage
+        // fallback to localStorage (only in browser)
         let subs: string[] = [];
-        try { const s = localStorage.getItem('subscriptions'); subs = s ? JSON.parse(s) : []; } catch (e) { subs = []; }
+        if (isPlatformBrowser(this.platformId)) {
+          try { const s = localStorage.getItem('subscriptions'); subs = s ? JSON.parse(s) : []; } catch (e) { subs = []; }
+        } else { subs = []; }
         this.loadPostsForSubscriptionsOrGlobal(subs);
       });
     } else {
-      // Not logged in - fallback to localStorage
+      // Not logged in - fallback to localStorage (only in browser)
       let subs: string[] = [];
-      try { const s = localStorage.getItem('subscriptions'); subs = s ? JSON.parse(s) : []; } catch (e) { subs = []; }
+      if (isPlatformBrowser(this.platformId)) {
+        try { const s = localStorage.getItem('subscriptions'); subs = s ? JSON.parse(s) : []; } catch (e) { subs = []; }
+      } else { subs = []; }
       if (subs && subs.length > 0) {
         this.loadPostsForSubscriptionsOrGlobal(subs);
       } else {
         this.postService.getPosts().subscribe(posts => {
           this.feedPosts = posts;
           this.feedLoaded = true;
+          if (posts && posts.length > 0) {
+            this.showEmptyRequested = false;
+          }
           if (!posts || posts.length === 0) {
             this.router.navigate(['/discover']);
           }
@@ -111,6 +133,9 @@ export class HomeComponent implements OnInit {
         this.postService.getPostsByUser(myId).subscribe(posts => {
           this.feedPosts = posts;
           this.feedLoaded = true;
+          if (posts && posts.length > 0) {
+            this.showEmptyRequested = false;
+          }
           if (!posts || posts.length === 0) {
             // No posts from user
             this.feedLoaded = true;
@@ -149,12 +174,18 @@ export class HomeComponent implements OnInit {
         });
         this.feedPosts = flattened;
         this.feedLoaded = true;
+        if (this.feedPosts && this.feedPosts.length > 0) {
+          this.showEmptyRequested = false;
+        }
 
         if (!this.feedPosts || this.feedPosts.length === 0) {
           // If still empty, fallback to global feed
           this.postService.getPosts().subscribe(posts => {
             this.feedPosts = posts;
             this.feedLoaded = true;
+            if (posts && posts.length > 0) {
+              this.showEmptyRequested = false;
+            }
             if (!posts || posts.length === 0) {
               this.feedLoaded = true;
               if (this.showEmptyRequested) {
@@ -169,6 +200,9 @@ export class HomeComponent implements OnInit {
       this.postService.getPosts().subscribe(posts => {
         this.feedPosts = posts;
         this.feedLoaded = true;
+        if (posts && posts.length > 0) {
+          this.showEmptyRequested = false;
+        }
         // If there are no posts in the feed, navigate to Discover to show users
         if (!posts || posts.length === 0) {
           this.feedLoaded = true;
@@ -191,8 +225,10 @@ export class HomeComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('currentUser');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('currentUser');
+    }
     this.router.navigate(['/login']);
   }
 }

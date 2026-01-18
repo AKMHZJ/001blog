@@ -1,5 +1,4 @@
-<header class="fixed top-0 w-full z-50 backdrop-blur-md border-b transition-colors duration-500"
-        [ngStyle]="{
+<header class="fixed top-0 w-full z-50 backdrop-blur-md border-b transition-colors duration-500" [ngStyle]="{
           'background-color': isDark ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)',
           'border-color': isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
         }">
@@ -8,11 +7,10 @@
 
     <a routerLink="/feed" class="hover:opacity-70 transition-opacity flex items-center gap-2">
       <div class="w-8 h-8 rounded-full flex items-center justify-center font-semibold text-lg font-serif"
-           [ngStyle]="{'background-color': isDark ? '#ffffff' : '#000000', 'color': isDark ? '#000000' : '#ffffff'}">
+        [ngStyle]="{'background-color': isDark ? '#ffffff' : '#000000', 'color': isDark ? '#000000' : '#ffffff'}">
         B
       </div>
-      <h1 class="font-serif text-lg tracking-wide"
-          [ngStyle]="{'color': isDark ? '#ffffff' : '#000000'}">
+      <h1 class="font-serif text-lg tracking-wide" [ngStyle]="{'color': isDark ? '#ffffff' : '#000000'}">
         Blog Network
       </h1>
     </a>
@@ -20,46 +18,34 @@
     <div *ngIf="currentUser$ | async as currentUser" class="flex items-center gap-8">
 
       <nav class="hidden md:flex gap-8 font-sans text-sm">
-        <a href="/feed"
-           (click)="goToFeed($event)"
-           routerLinkActive="opacity-100 font-medium"
-           [routerLinkActiveOptions]="{exact: true}"
-           class="transition-all opacity-60 hover:opacity-100"
-           [style.color]="isDark ? 'white' : 'black'">
+        <a routerLink="/feed" routerLinkActive="opacity-100 font-medium" [routerLinkActiveOptions]="{exact: true}"
+          class="transition-all opacity-60 hover:opacity-100" [style.color]="isDark ? 'white' : 'black'">
           Feed
         </a>
-        <a routerLink="/my-blog"
-           routerLinkActive="opacity-100 font-medium"
-           class="transition-all opacity-60 hover:opacity-100"
-           [style.color]="isDark ? 'white' : 'black'">
+        <a routerLink="/my-blog" routerLinkActive="opacity-100 font-medium"
+          class="transition-all opacity-60 hover:opacity-100" [style.color]="isDark ? 'white' : 'black'">
           My Blog
         </a>
-        <a routerLink="/discover"
-           routerLinkActive="opacity-100 font-medium"
-           class="transition-all opacity-60 hover:opacity-100"
-           [style.color]="isDark ? 'white' : 'black'">
+        <a routerLink="/discover" routerLinkActive="opacity-100 font-medium"
+          class="transition-all opacity-60 hover:opacity-100" [style.color]="isDark ? 'white' : 'black'">
           Discover
         </a>
-        <a routerLink="/about"
-           routerLinkActive="opacity-100 font-medium"
-           class="transition-all opacity-60 hover:opacity-100"
-           [style.color]="isDark ? 'white' : 'black'">
+        <a routerLink="/about" routerLinkActive="opacity-100 font-medium"
+          class="transition-all opacity-60 hover:opacity-100" [style.color]="isDark ? 'white' : 'black'">
           About
         </a>
       </nav>
 
       <div class="flex items-center gap-3 pl-8 border-l"
-           [style.border-color]="isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'">
+        [style.border-color]="isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'">
 
-        <img [src]="currentUser.avatar || 'assets/default-avatar.png'"
-             alt="User"
-             class="w-8 h-8 rounded-full object-cover bg-gray-500">
+        <img [src]="currentUser.avatar || 'assets/default-avatar.png'" alt="User"
+          class="w-8 h-8 rounded-full object-cover bg-gray-500">
 
-        <button (click)="logout()"
-                class="transition-colors hover:text-red-500"
-                [style.color]="isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)'"
-                title="Logout">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button (click)="logout()" class="transition-colors hover:text-red-500"
+          [style.color]="isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)'" title="Logout">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
             <polyline points="16 17 21 12 16 7"></polyline>
             <line x1="21" y1="12" x2="9" y2="12"></line>
