@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth';
-  
+
   private loggedIn = new BehaviorSubject<boolean>(this.isTokenPresent());
   loggedIn$ = this.loggedIn.asObservable();
 
@@ -17,6 +17,10 @@ export class AuthService {
   currentUser$ = this.currentUser.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {}
+
+  private isValidToken(token: string | null): token is string {
+    return !!token && token !== 'undefined' && token !== 'null' && token.trim().length > 0;
+  }
 
   private isTokenPresent(): boolean {
     if (typeof window !== 'undefined' && window.localStorage) {
@@ -26,12 +30,13 @@ export class AuthService {
   }
 
   signup(userData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/signup`, userData).pipe(
-      tap((response: any) => {
-        this.saveUser(response);
-        this.loggedIn.next(true);
-      })
-    );
+    return this.http.post(`${this.apiUrl}/signup`, userData);
+    // .pipe(
+      // tap((response: any) => {
+      //   this.saveUser(response);
+      //   this.loggedIn.next(true);
+      // })
+    // );
   }
 
   login(credentials: any): Observable<any> {
@@ -55,22 +60,53 @@ export class AuthService {
   }
 
   saveUser(data: any) {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      localStorage.setItem('token', data.token);
+    // if (typeof window !== 'undefined' && window.localStorage) {
+    //   localStorage.setItem('token', data.token);
 
+    //   const user = {
+    //     id: data.id || data.userId || '1',
+    //     username: data.username,
+    //     displayName: data.displayName || data.username,
+    //     bio: data.bio || '',
+    //     avatar: data.avatar || '',
+    //     email: data.email || '',
+    //   };
+
+    //   localStorage.setItem('currentUser', JSON.stringify(user));
+    //   localStorage.setItem('username', data.username);
+    //   this.loggedIn.next(true);
+    //   this.currentUser.next(user);
+    // }
+    if (typeof window === 'undefined' || !window.localStorage) return;
+
+    const token = data?.token;
+    if (this.isValidToken(token)) {
+      localStorage.setItem('token', token);
+      this.loggedIn.next(true);
+    } else {
+      // ✅ Avoid storing "undefined" token
+      localStorage.removeItem('token');
+      this.loggedIn.next(false);
+    }
+
+    const username = data?.username;
+    if (typeof username === 'string' && username.trim().length > 0) {
       const user = {
-        id: data.id || data.userId || '1',
-        username: data.username,
-        displayName: data.displayName || data.username,
-        bio: data.bio || '',
-        avatar: data.avatar || '',
-        email: data.email || '',
+        id: data?.id || data?.userId || '',
+        username,
+        displayName: data?.displayName || username,
+        bio: data?.bio || '',
+        avatar: data?.avatar || '',
+        email: data?.email || '',
       };
 
       localStorage.setItem('currentUser', JSON.stringify(user));
-      localStorage.setItem('username', data.username);
-      this.loggedIn.next(true);
+      localStorage.setItem('username', username);
       this.currentUser.next(user);
+    } else {
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('username');
+      this.currentUser.next(null);
     }
   }
 
